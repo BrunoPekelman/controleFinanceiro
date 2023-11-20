@@ -8,7 +8,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 r = r'\d{2}.\d{2}.\d{4}'
 
 #definir arquivo-fatura
-fatura_txt = "FaturaBB.txt"
+fatura_txt = "fatura1123.txt"
 
 #def arquivo final excel
 arquivo_final = 'Finanças.xlsx'
@@ -44,10 +44,13 @@ colunas = ['Data', 'Descrição', 'Parcela', 'Cidade', 'País', 'Valor', 'Tipo']
 df = pd.DataFrame(columns=colunas)
 
 palavras_chave = {
-    ('ifood', 'rappi', 'RAPPI*MIMIC FORNECIMENT', 'DL *Rappi BR  Prime Pr'): 'delivery',
-    ('veloe', 'ipiranga', 'abastece', 'abasteceai'): 'carro',
-    ('AmazonPrimeBR', 'Microsoft*Ultimate 1 Mo', 'DL*GOOGLE YouTub'): 'Assinatura',
-    ('IOF - COMPRA NO EXTERIO'): 'IOF',
+    ('ifood', 'rappi', 'RAPPI*MIMIC FORNECIMENT', 'DL *Rappi BR  Prime Pr', 'RAPPI*RAPPI BRASIL'): 'delivery',
+    ('veloe', 'ipiranga', 'abastece', 'abasteceai', 'automo'): 'carro',
+    ('AmazonPrimeBR', 'Microsoft*Ultimate 1 Mo', 'DL*GOOGLE YouTub', 'kaspersky'): 'Assinatura',
+    ('iof',): 'IOF  ',
+    ('Amazon Prime Canais',): 'Compras Online',
+    
+    
 }
 
 
@@ -75,11 +78,12 @@ df['Valor'] = df['Valor'].astype(float)
 def categorizar_descricao(descricao):
     for palavras, tipo in palavras_chave.items():
         if any(palavra.lower() in descricao.lower() for palavra in palavras):
-            print(f'Correspondência encontrada: {palavras} - {tipo}')
+            print(f'Correspondência encontrada: {palavras} - {tipo} para a descrição: {descricao}')
             return tipo
-    
     print(f'Nenhuma correspondência encontrada para: {descricao}')
-    return 'Outros'  # Se nenhuma correspondência for encontrada, categorize como 'Outro'
+    return 'Outros'
+
+
 
 # Aplicar a função à coluna 'Descrição' para criar a coluna 'Tipo'
 df['Tipo'] = df['Descrição'].apply(categorizar_descricao)
@@ -113,16 +117,3 @@ for record in dataframe_to_rows(df_final, index=False, header=False):
 
 # Salve as alterações
 book.save(arquivo_final)
-
-
-
-
-
-
-
-
-
-
-        
-
-        
